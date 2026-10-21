@@ -1998,3 +1998,18 @@ fn an_apps_page_is_a_card_in_the_middle_with_next_and_previous_arrows_and_closes
     h.run_steps(30);
     assert!(!showing(&h, "photocraft"), "a click outside did not close it");
 }
+
+#[test]
+fn a_narrow_table_keeps_each_apps_buttons_in_the_window() {
+    let (mut h, _) = harness(ViewMode::Table, egui::Theme::Dark, true);
+    for width in [1180.0, 900.0, 720.0] {
+        h.set_size(egui::vec2(width, 500.0));
+        h.run_steps(6);
+        snapshot(&mut h, &format!("table-{width}"));
+        let button = h.get_by_label("Update to 0.5.0").rect();
+        assert!(button.right() <= width, "at {width} px the button ends at {}", button.right());
+        for column in ["App", "Status"] {
+            assert!(h.query_by_label(column).is_some(), "at {width} px the {column} column is gone");
+        }
+    }
+}
