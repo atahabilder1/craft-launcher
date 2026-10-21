@@ -594,6 +594,10 @@ impl LauncherUi {
                                 // A column that is not sorted still names itself.
                                 if !label.is_empty() {
                                     widgets::hud(ui, label, t.faint);
+                                } else if !shown.contains(&TableColumn::Released) {
+                                    // Over the buttons, where the header is empty: the sort menu, once
+                                    // Released is hidden, so the table can still be sorted by it.
+                                    self.sort_picker(ui);
                                 }
                                 return;
                             };
